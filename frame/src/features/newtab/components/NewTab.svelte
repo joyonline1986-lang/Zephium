@@ -20,7 +20,7 @@
   import { clockFace, clockFormat, dayKey, focusSpan, untilNextMinute } from "../lib/clock";
   import { readSystemClock, systemHour24 } from "../lib/system-clock.svelte";
   import { focus, localDay } from "$domain/time";
-  import { groundPath, notchShape, notchWidth } from "../lib/ground";
+  import { groundPath, notchShape } from "../lib/ground";
   import { layout, type Box } from "../lib/layout";
   import { WORDMARK } from "$shared/lib/wordmark";
   import { reducedMotion } from "$shared/lib/motion";
@@ -262,9 +262,26 @@
     placeSkyInWindow({ left, top, height: pageHeight, y, h });
   });
   const id = $props.id();
-  let ground = $derived(groundPath(width, height, page.notch));
-  let lip = $derived(notchShape(width, height, page.notch));
-  let fieldWidth = $derived(notchWidth(width, page.notch));
+  // The field floats on the page, so the ground is whole: no notch is cut.
+  let whole = $derived({ ...page.notch, width: 0 });
+  let ground = $derived(groundPath(width, height, whole));
+  let lip = $derived(notchShape(width, height, whole));
+  const FIELD_WIDTH = 560;
+  const FIELD_HEIGHT = 46;
+  let fieldWidth = $derived(Math.max(0, Math.min(FIELD_WIDTH, width - 48)));
+  // Under the name and the time when they show, else a little above the middle.
+  let fieldTop = $derived(
+    Math.round(
+      Math.max(
+        page.notch.height + 24,
+        page.when !== null
+          ? page.when + 20 + 36
+          : showWordmark
+            ? page.mark.y + page.mark.h + 36
+            : height * 0.34,
+      ),
+    ),
+  );
   let letters = $derived(
     `scale(${page.mark.w / WORDMARK.width}) ` +
       `translate(${-WORDMARK.x} ${-WORDMARK.y}) scale(${WORDMARK.scaleX} ${WORDMARK.scaleY})`,
@@ -441,7 +458,12 @@
     style:height={`${page.notch.height}px`}
   ></div>
 
-  <div class="field" style:width={`${fieldWidth}px`} style:height={`${page.notch.height}px`}>
+  <div
+    class="field"
+    style:width={`${fieldWidth}px`}
+    style:height={`${FIELD_HEIGHT}px`}
+    style:top={`${fieldTop}px`}
+  >
     {@render search()}
   </div>
 

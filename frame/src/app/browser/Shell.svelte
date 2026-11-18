@@ -693,6 +693,7 @@
                           tabId={tabs.activeId()}
                           {loadMenu}
                           onsettings={openSearchSettings}
+                          onopen={(tool) => toolHost.open(tool)}
                         />{/snippet}</LazyView
                     >{/key}{/snippet}</NewTab
               >{/snippet}</LazyView
