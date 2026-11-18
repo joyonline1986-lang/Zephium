@@ -2,18 +2,12 @@
   import { onMount, untrack } from "svelte";
   import { fade } from "svelte/transition";
   import { reducedMotion } from "$shared/lib/motion";
-  import {
-    Bookmark02Icon,
-    BubbleChatIcon,
-    Cancel01Icon,
-    Download01Icon,
-  } from "@hugeicons/core-free-icons";
+  import { Cancel01Icon } from "@hugeicons/core-free-icons";
+  import type { IconSvgElement } from "@hugeicons/svelte";
   import * as m from "$shared/i18n/messages";
   import SearchField from "$shared/ui/SearchField";
   import IconButton from "$shared/ui/IconButton";
   import Icon from "$shared/ui/Icon";
-  import { preferences } from "$domain/preferences";
-  import { tabs } from "$domain/tabs";
   import ResultList from "./ResultList.svelte";
   import EngineMenu from "./EngineMenu.svelte";
   import { createSearchSurface } from "../lib/search-surface.svelte";
@@ -25,6 +19,7 @@
     onsettings,
     onactive,
     onopen,
+    tools = [],
   }: {
     onsettings?: () => void;
     tabId: string | null;
@@ -33,6 +28,12 @@
     onactive?: (active: boolean) => void;
     /** Opens one of the tools the bubbles beside the field stand for. */
     onopen?: (tool: "ai" | "downloads" | "bookmarks") => void;
+    /** The tools the bubbles stand for, named and drawn by the page that hosts the field. */
+    tools?: readonly {
+      tool: "ai" | "downloads" | "bookmarks";
+      label: string;
+      icon: IconSvgElement;
+    }[];
   } = $props();
 
   // The search session is bound to one blank tab for the life of this
@@ -65,14 +66,6 @@
   let budded = $state(false);
   let split = $derived(budded && !active);
   const BUD_DELAY_MS = 260;
-  let incognito = $derived(tabs.profile()?.kind === "incognito");
-  let bubbles = $derived([
-    { tool: "downloads" as const, label: m.menu_downloads(), icon: Download01Icon },
-    ...(preferences.aiEnabled() && !incognito
-      ? [{ tool: "ai" as const, label: m.panel_ask_zephium(), icon: BubbleChatIcon }]
-      : []),
-    { tool: "bookmarks" as const, label: m.tool_bookmarks(), icon: Bookmark02Icon },
-  ]);
 
   function picked(next: string | null) {
     if (next !== null) surface.changed(next);
@@ -169,7 +162,7 @@
   data-open={visible}
   data-split={split}
   style:--available={`${available}px`}
-  style:--count={bubbles.length}
+  style:--count={tools.length}
   onfocusout={(event) => {
     if (event.relatedTarget instanceof Node && root.contains(event.relatedTarget)) return;
     surface.blurred();
@@ -272,7 +265,7 @@
   </div>
 
   <div class="bubbles" inert={!split}>
-    {#each bubbles as bubble, index (bubble.tool)}
+    {#each tools as bubble, index (bubble.tool)}
       <button
         type="button"
         class="bubble"

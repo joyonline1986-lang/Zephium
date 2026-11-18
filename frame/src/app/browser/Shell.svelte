@@ -72,6 +72,7 @@
   import { installChromeMenu } from "$shared/lib/chrome-menu";
   import { tabs } from "$domain/tabs";
   import { preferences } from "$domain/preferences";
+  import { Bookmark02Icon, BubbleChatIcon, Download01Icon } from "@hugeicons/core-free-icons";
   /** The new tab field's menu, kept out of the graph the launcher shares. */
   const loadMenu = () => import("$shared/ui/Menu");
   /** New Note, from the menu or its shortcut: a note starts where notes are open. */
@@ -243,6 +244,15 @@
   let toolPage = $derived(browserPage.toolPage());
   let besideRail = $derived(paneled || toolPage);
   let incognito = $derived(tabs.profile()?.kind === "incognito");
+  // The bubbles beside the new tab's field, named here where these words
+  // already load with the dock, so the field costs no words of its own.
+  let newTabTools = $derived([
+    { tool: "downloads" as const, label: m.menu_downloads(), icon: Download01Icon },
+    ...(preferences.aiEnabled() && !incognito
+      ? [{ tool: "ai" as const, label: m.panel_ask_zephium(), icon: BubbleChatIcon }]
+      : []),
+    { tool: "bookmarks" as const, label: m.tool_bookmarks(), icon: Bookmark02Icon },
+  ]);
   // The column's body settles in only when the environment changes, never on launch.
   let modeSwitched = $state(false);
   let shownMode: boolean | null = null;
@@ -693,6 +703,7 @@
                           tabId={tabs.activeId()}
                           {loadMenu}
                           onsettings={openSearchSettings}
+                          tools={newTabTools}
                           onopen={(tool) => toolHost.open(tool)}
                         />{/snippet}</LazyView
                     >{/key}{/snippet}</NewTab
