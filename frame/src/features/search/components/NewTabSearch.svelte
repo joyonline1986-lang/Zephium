@@ -456,6 +456,18 @@
       background-color var(--motion-fast) var(--ease-out);
   }
 
+  .bubble:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  :global(:root[data-reduce-motion="true"]) .card,
+  :global(:root[data-reduce-motion="true"]) .sheet,
+  :global(:root[data-reduce-motion="true"]) .bubble {
+    animation: none;
+    transition: none;
+  }
+
   .dock[data-split="true"] .bubble {
     opacity: 1;
     transform: none;
@@ -471,11 +483,6 @@
     transform: scale(0.94);
     transition-duration: var(--motion-fast);
     transition-delay: 0ms;
-  }
-
-  .bubble:focus-visible {
-    outline: 2px solid var(--color-accent);
-    outline-offset: 2px;
   }
 
   @keyframes card-in {
@@ -499,13 +506,6 @@
       animation: none;
       transition: none;
     }
-  }
-
-  :global(:root[data-reduce-motion="true"]) .card,
-  :global(:root[data-reduce-motion="true"]) .sheet,
-  :global(:root[data-reduce-motion="true"]) .bubble {
-    animation: none;
-    transition: none;
   }
 
   @media (forced-colors: active) {

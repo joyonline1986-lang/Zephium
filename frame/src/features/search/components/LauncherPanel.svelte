@@ -523,7 +523,7 @@
     box-shadow: inset 0 0 0 1px var(--color-border-strong);
   }
 
-  :global(:root:is([data-material="acrylic"], [data-material="mica"]))
+  :global(:root:is([data-material="acrylic"], [data-material="mica"], [data-material="blur"]))
     .launcher[data-layout="fused"] {
     box-shadow: none;
   }

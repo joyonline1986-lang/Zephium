@@ -329,7 +329,8 @@
     box-shadow: inset 0 0 0 1px var(--color-border-strong);
   }
 
-  :global(:root:is([data-material="acrylic"], [data-material="mica"])) .cards {
+  :global(:root:is([data-material="acrylic"], [data-material="mica"], [data-material="blur"]))
+    .cards {
     box-shadow: none;
   }
 

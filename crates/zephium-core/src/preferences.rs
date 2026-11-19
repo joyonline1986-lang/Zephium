@@ -213,7 +213,14 @@ pub fn value_allowed(key: &str, value: &str) -> bool {
         // system material the system cannot install falls back on its own.
         "ui.material" => matches!(
             value,
-            "auto" | "liquid_glass" | "vibrancy" | "acrylic" | "mica" | "mica_alt" | "none"
+            "auto"
+                | "liquid_glass"
+                | "vibrancy"
+                | "acrylic"
+                | "mica"
+                | "mica_alt"
+                | "blur"
+                | "none"
         ),
         "ui.newtab-background" => matches!(value, "sky" | "image"),
         // An admitted local blob, never a URL or a filesystem path. The media

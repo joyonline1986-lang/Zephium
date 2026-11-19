@@ -1793,7 +1793,14 @@ export type LoginItemStatus = {
 	needs_approval: boolean,
 };
 
-export type Material = "none" | "vibrancy" | "liquid_glass" | "acrylic" | "mica" | "mica_alt";
+export type Material =
+  | "none"
+  | "vibrancy"
+  | "liquid_glass"
+  | "acrylic"
+  | "mica"
+  | "mica_alt"
+  | "blur";
 
 /**  Outcome of admitting one public image for a subject on the canvas. */
 export type MediaAdmitV1 =

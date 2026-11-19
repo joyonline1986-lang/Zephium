@@ -622,6 +622,7 @@ pub fn apply_material(window: &WebviewWindow, dark: bool) -> bool {
         windows_version::OsVersion::current().build,
     );
     let clear = || {
+        let _ = window_vibrancy::clear_blur(window);
         let _ = window_vibrancy::clear_tabbed(window);
         let _ = window_vibrancy::clear_mica(window);
         window_vibrancy::clear_acrylic(window)
@@ -633,6 +634,7 @@ pub fn apply_material(window: &WebviewWindow, dark: bool) -> bool {
         Material::MicaAlt => {
             window_vibrancy::apply_tabbed(window, Some(dark)).map(|()| Material::MicaAlt)
         }
+        Material::Blur => window_vibrancy::apply_blur(window, Some(tint)).map(|()| Material::Blur),
         _ => window_vibrancy::apply_acrylic(window, Some(tint)).map(|()| Material::Acrylic),
     }
     .or_else(|error| {

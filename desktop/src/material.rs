@@ -11,6 +11,8 @@ pub enum Material {
     Acrylic,
     Mica,
     MicaAlt,
+    /// The system's own blur-behind: frosted, with no acrylic grain.
+    Blur,
 }
 
 /// The person's choice of material. The system still decides what it can
@@ -25,6 +27,7 @@ pub enum Preference {
     Acrylic,
     Mica,
     MicaAlt,
+    Blur,
     None,
 }
 
@@ -36,6 +39,7 @@ impl Preference {
             "acrylic" => Self::Acrylic,
             "mica" => Self::Mica,
             "mica_alt" => Self::MicaAlt,
+            "blur" => Self::Blur,
             "none" => Self::None,
             _ => Self::Auto,
         }
@@ -51,6 +55,8 @@ pub fn windows_material(
 ) -> Material {
     if high_contrast || preference == Preference::None {
         Material::None
+    } else if preference == Preference::Blur {
+        Material::Blur
     } else if !launcher && preference == Preference::Auto && build == 22000 {
         // Acrylic uses the slow legacy composition API on Windows 11 21H2.
         Material::Mica
@@ -441,6 +447,7 @@ mod tests {
             ("auto", Preference::Auto),
             ("mica", Preference::Mica),
             ("mica_alt", Preference::MicaAlt),
+            ("blur", Preference::Blur),
             ("acrylic", Preference::Acrylic),
             ("none", Preference::None),
             ("vibrancy", Preference::Vibrancy),
@@ -484,6 +491,23 @@ mod tests {
                 Material::None
             );
         }
+    }
+
+    #[test]
+    fn windows_blur_is_native_blur_everywhere_it_is_chosen() {
+        for build in [19045, 22000, 22621] {
+            for launcher in [false, true] {
+                assert_eq!(
+                    windows_material(Preference::Blur, false, launcher, build),
+                    Material::Blur
+                );
+                assert_eq!(
+                    windows_material(Preference::Blur, true, launcher, build),
+                    Material::None
+                );
+            }
+        }
+        assert_eq!(serde_json::to_string(&Material::Blur).unwrap(), "\"blur\"");
     }
 
     #[test]

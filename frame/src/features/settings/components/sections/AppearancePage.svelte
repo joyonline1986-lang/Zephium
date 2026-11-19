@@ -51,6 +51,7 @@
         { value: "mica", label: m.settings_material_mica() },
         { value: "mica_alt", label: m.settings_material_mica_alt() },
         { value: "acrylic", label: m.settings_material_acrylic() },
+        { value: "blur", label: m.settings_material_blur() },
         { value: "none", label: m.settings_material_none() },
       ]
     : [
@@ -71,6 +72,7 @@
     acrylic: m.settings_material_acrylic,
     mica: m.settings_material_mica,
     mica_alt: m.settings_material_mica_alt,
+    blur: m.settings_material_blur,
     none: m.settings_material_solid,
   };
 
