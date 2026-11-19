@@ -1,7 +1,7 @@
 //! The launcher has one width and a height that follows its content. It is
 //! not resizable or draggable, so there is no geometry to persist: it opens
 //! at the same place on whichever display the user is working on.
-pub const WIDTH: f64 = 680.0;
+pub const WIDTH: f64 = 760.0;
 /// Room around natively drawn shapes for their shadow. Liquid Glass casts a
 /// wide, soft one; any less and the window's edge cuts it off in a visible
 /// rectangle. The window is transparent there.

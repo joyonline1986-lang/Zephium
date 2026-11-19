@@ -4191,6 +4191,16 @@ fn execute_command_or(
     if id == "tab.close" && tab_switcher::close_selected(app) {
         return accepted_ui_operation();
     }
+    // A new tab starts at the floating launcher, over the page you are on:
+    // no tab exists until a destination is chosen. When the launcher cannot
+    // be shown, the ordinary empty tab opens instead.
+    if id == "tab.new"
+        && overlay::request(app, |panel| {
+            panel.intent(zephium_ipc::PanelIntent::Search);
+        })
+    {
+        return accepted_ui_operation();
+    }
     if matches!(id, "tab.recent.next" | "tab.recent.previous") {
         return if tab_switcher::step(app, id == "tab.recent.previous", true) {
             accepted_ui_operation()

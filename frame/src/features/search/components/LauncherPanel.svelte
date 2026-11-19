@@ -63,7 +63,7 @@
   const GAP = 10;
   /** The shapes' width. Native widens the window around it to leave room for
    *  their shadow, so the margin is whatever it left. */
-  const WIDTH = 680;
+  const WIDTH = 760;
   const FOOTER = 52;
   /** Mirrors the native ceiling on the launcher window: this, or the work
    *  area less a margin above and below on a display too short for it. */
